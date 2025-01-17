@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         hostname: 'm.media-amazon.com',
         // pathname: "/path/to/images/**"
       },
+      {
+        protocol: 'https',
+        hostname: 'ik.imagekit.io',
+        port: '',
+      },
     ],
   },
 };
