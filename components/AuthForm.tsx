@@ -24,6 +24,8 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { FIELD_NAMES, FIELD_TYPES } from '@/constants';
 import ImageUpload from './ImageUpload';
+import { toast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 interface Props<T extends FieldValues> {
   type: 'SIGN_UP' | 'SIGN_IN';
@@ -38,6 +40,7 @@ const AuthForm = <T extends FieldValues>({
   defaultValues,
   onSubmit,
 }: Props<T>) => {
+  const router = useRouter();
   const isSignIn = type === 'SIGN_IN';
 
   // 1. Define your form.
@@ -46,7 +49,35 @@ const AuthForm = <T extends FieldValues>({
     defaultValues: defaultValues as DefaultValues<T>,
   });
   // 2. Define a submit handler.
-  const handleSubmit: SubmitHandler<T> = async (data) => {};
+  const handleSubmit: SubmitHandler<T> = async (data) => {
+    try {
+      const { success, error } = await onSubmit(data);
+      if (success) {
+        toast({
+          title: 'Success',
+          description: !isSignIn
+            ? 'Your account has been created successfully.'
+            : 'Your account has been logged in successfully.',
+        });
+        router.push('/');
+        // form.reset();
+      } else {
+        toast({
+          title: `Error ${isSignIn ? 'signing in' : 'signing up'}`,
+          description: error || 'An error occurred during form submission.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error: any) {
+      // Handle form submission errors.
+      console.error('Error submitting form:', error.message);
+      toast({
+        title: `Error ${isSignIn ? 'signing in' : 'signing up'}`,
+        description: 'An error occurred during form submission.',
+        variant: 'destructive',
+      });
+    }
+  };
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-semibold text-white">

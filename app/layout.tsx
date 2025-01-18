@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 // import { Geist, Geist_Mono } from "next/font/google";
 import './globals.css';
-import localfont from 'next/font/local';
+import localFont from 'next/font/local';
 import { Toaster } from '@/components/ui/toaster';
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
 
-const ibmPlexSans = localfont({
+const ibmPlexSans = localFont({
   src: [
     {
       path: '/fonts/IBMPlexSans-Regular.ttf',
@@ -17,7 +19,7 @@ const ibmPlexSans = localfont({
       style: 'normal',
     },
     {
-      path: '/fonts/IBMPlexSans-Semibold.ttf',
+      path: '/fonts/IBMPlexSans-SemiBold.ttf',
       weight: '600',
       style: 'normal',
     },
@@ -29,7 +31,7 @@ const ibmPlexSans = localfont({
   ],
 });
 
-const bebasNeue = localfont({
+const bebasNeue = localFont({
   src: [
     { path: '/fonts/BebasNeue-Regular.ttf', weight: '400', style: 'normal' },
   ],
@@ -41,19 +43,22 @@ export const metadata: Metadata = {
   description: 'BookTard App - All Rights Reserved 2025.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
   return (
     <html lang="en">
-      <body
-        className={`${ibmPlexSans.className} ${bebasNeue.className} antialiased`}
-      >
-        {children}
-        <Toaster />
-      </body>
+      <SessionProvider session={session}>
+        <body
+          className={`${ibmPlexSans.className} ${bebasNeue.variable} antialiased`}
+        >
+          {children}
+          <Toaster />
+        </body>
+      </SessionProvider>
     </html>
   );
 }
