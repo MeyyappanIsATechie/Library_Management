@@ -72,13 +72,32 @@ const signUp = async (params: AuthCredentials) => {
       universityCard,
     });
 
-    await workflowClient.trigger({
-      url: `${config.env.prodApiEndpoint}/api/workflow/onboarding`,
-      body: {
-        email,
-        fullName,
-      },
-    });
+    // await workflowClient.trigger({
+    //   url: `${config.env.prodApiEndpoint}/api/workflow/onboarding`,
+    //   body: {
+    //     email,
+    //     fullName,
+    //   },
+    // });
+
+    const response = await fetch(
+      `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          fullName,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      console.error('Failed to trigger workflow');
+      throw new Error('Workflow trigger failed');
+    }
 
     await signInWithCredentials({ email, password });
     return { success: true };
