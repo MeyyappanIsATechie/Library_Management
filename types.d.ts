@@ -8,7 +8,7 @@ interface Book {
   availableCopies: number;
   description: string;
   coverColor: string;
-  publicationYear: number;
+  publicationYear: number | null;
   coverUrl: string;
   videoUrl: string;
   summary: string;
