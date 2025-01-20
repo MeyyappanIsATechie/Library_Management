@@ -15,6 +15,20 @@
       "when": 1737387595229,
       "tag": "0001_fancy_tony_stark",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737393118454,
+      "tag": "0002_curved_logan",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1737393249024,
+      "tag": "0003_lyrical_bushwacker",
+      "breakpoints": true
     }
   ]
 }
